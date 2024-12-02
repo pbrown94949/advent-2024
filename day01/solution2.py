@@ -4,10 +4,10 @@ from collections import defaultdict
 def run(lines):
     left, right = get_lists(lines)
     counts = count_occurrences(right)
-    similarity_score = 0
+    result = 0
     for item in left:
-        similarity_score += (item * counts[item])
-    print(similarity_score)
+        result += (item * counts[item])
+    return result
 
 
 def get_lists(lines):

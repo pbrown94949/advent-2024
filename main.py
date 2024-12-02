@@ -25,7 +25,8 @@ def init():
 
 def process():
     solution = get_solution(args.day, args.solution)
-    solution.run(get_input_lines(args.day, args.input))
+    answer = solution.run(get_input_lines(args.day, args.input))
+    print(f'Answer: {answer}')
 
 
 def get_solution(day, solution):

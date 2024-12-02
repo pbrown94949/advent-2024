@@ -1,10 +1,10 @@
 def run(lines):
     left, right = get_lists(lines)
-    total_distance = 0
+    result = 0
     for pair in zip(left, right):
         distance = abs(pair[0] - pair[1])
-        total_distance += distance
-    print(total_distance)
+        result += distance
+    return result
 
 
 def get_lists(lines):
