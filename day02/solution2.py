@@ -30,9 +30,8 @@ def is_safe_report_with_dampener(report):
             return True
     return False
 
+
 # return copies of the report with one item removed
-
-
 def drop_level_from_report(report):
     for i in range(len(report)):
         yield [item for idx, item in enumerate(report) if idx != i]
