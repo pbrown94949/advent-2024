@@ -37,8 +37,7 @@ def get_solution(day, solution):
 def get_input_lines(day, input_id):
     file_name = f'input_{input_id}.txt'
     file_path = os.path.join(f'day{day:02d}', file_name)
-    for line in open(file_path):
-        yield line.strip()
+    return [line.strip() for line in open(file_path)]
 
 
 def wrapup():
