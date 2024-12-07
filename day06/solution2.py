@@ -46,12 +46,6 @@ def get_obstacles(lines):
     return result
 
 
-def turn_right(direction):
-    keys = list(directions.keys())
-    index = keys.index(direction)
-    return keys[(index + 1) % 4]
-
-
 def get_visited_positions(lab, obstacles, position, direction):
     result = set()
     while position in lab:
@@ -80,3 +74,9 @@ def find_cycle(lab, obstacles, position, direction):
         # if we've already been in this position traveling in the same direction, we are in a cycle
         if (position, direction) in visited:
             return True
+
+
+def turn_right(direction):
+    keys = list(directions.keys())
+    index = keys.index(direction)
+    return keys[(index + 1) % 4]
