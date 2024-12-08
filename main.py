@@ -5,8 +5,8 @@ import time
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument('day', type=int)
-argparser.add_argument('solution', type=int, choices=[1, 2])
-argparser.add_argument('input', choices=['a', 'b'])
+argparser.add_argument('solution', type=int)
+argparser.add_argument('input')
 
 
 def main():
