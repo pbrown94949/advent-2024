@@ -22,7 +22,6 @@ def init():
     start_time = time.time()
 
 
-
 def process():
     solution = get_solution(args.day, args.solution)
     answer = solution.run(get_input_lines(args.day, args.input))
@@ -37,7 +36,8 @@ def get_solution(day, solution):
 def get_input_lines(day, input_id):
     file_name = f'input_{input_id}.txt'
     file_path = os.path.join(f'day{day:02d}', file_name)
-    return [line.strip() for line in open(file_path)]
+    with open(file_path) as file:
+        return [line.strip() for line in file]
 
 
 def wrapup():
