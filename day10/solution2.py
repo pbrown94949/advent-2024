@@ -20,9 +20,9 @@ def get_grid(lines):
 
 def get_trail_heads(grid):
     result = []
-    for k, v in grid.items():
-        if v == 0:
-            result.append([k])
+    for position, height in grid.items():
+        if height == 0:
+            result.append((position,))
     return result
 
 
@@ -33,7 +33,7 @@ def advance_trails(trails, grid):
         last_height = grid[last_position]
         for adjacent_position in get_adjacent_positions(last_position):
             if grid.get(adjacent_position, None) == last_height + 1:
-                new_trail = list(trail) + [adjacent_position]
+                new_trail = trail + (adjacent_position,)
                 result.append(new_trail)
     return result
 
@@ -47,5 +47,5 @@ def get_ratings(trails):
     temp = defaultdict(set)
     for trail in trails:
         trail_head = trail[0]
-        temp[trail_head].add(tuple(trail))
+        temp[trail_head].add(trail)
     return [len(x) for x in temp.values()]
