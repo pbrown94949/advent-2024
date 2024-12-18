@@ -86,7 +86,7 @@ def count_edges_by_row(row, cols, region):
     prior_edge_indicator = (False, False)
     for col in range(min(cols), max(cols) + 1):
         north, south = (row - 1, col), (row, col)
-        edge_indicator = (south in region, north in region)
+        edge_indicator = (north in region, south in region)
         if is_new_edge(edge_indicator, prior_edge_indicator):
             result += 1
         prior_edge_indicator = edge_indicator
