@@ -36,21 +36,14 @@ input_pattern = re.compile(r"""
 
 def run(lines):
     room = get_room(lines)
-    dividers = get_dividers(room)
     robots = get_robots(lines, room)
-    for _ in range(100):
+    for i in range(1, 11000):
         for robot in robots:
             robot.move()
+        print(f'Iteration: {i}')
         print_positions(robots, room)
-        input()
         print()
         print()
-    totals = defaultdict(int)
-    for robot in robots:
-        quadrant = calculate_quadrant(robot.position, dividers)
-        if quadrant is not None:
-            totals[quadrant] += 1
-    return math.prod(totals.values())
 
 
 def get_room(lines) -> tuple[int, int]:
