@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections import deque
 from dataclasses import dataclass
 
 
@@ -10,6 +11,7 @@ class Node:
         self._edges: list[Edge] = []
         self.distance = None
         self.visited = False
+        self.previous: list[Node] = []
 
     def __repr__(self):
         return f'Node(value={self._value}, distance={self.distance}, visited={self.visited})'
@@ -62,11 +64,23 @@ def run(lines):
             if not edge.node.visited:
                 if edge.node.distance is None or edge.node.distance > distance:
                     edge.node.distance = distance
+                    edge.node.previous = [current_node]
+                elif edge.node.distance == distance:
+                    edge.node.previous.append(current_node)
         current_node.visited = True
         current_node = weighted_graph.get_dijkstra_current_node()
     # We could have exited in any of the four directions, so check all four cases.
     exit_nodes = [weighted_graph.get_node_by_value((end, direction)) for direction in 'NSEW']
-    return min([node.distance for node in exit_nodes if node.distance is not None])
+    lowest_score = min([node.distance for node in exit_nodes if node.distance is not None])
+    queue = deque([node for node in exit_nodes if node.distance == lowest_score])
+    points_on_best_path = set()
+    while queue:
+        node = queue.popleft()
+        for previous in node.previous:
+            queue.append(previous)
+        point, _ = node.value
+        points_on_best_path.add(point)
+    return len(points_on_best_path)
 
 
 directions = {
