@@ -7,7 +7,7 @@ directions = {
 
 
 def run(lines):
-    """For each space on the track, look two coordinates in every direction. If that coordinate is also a track, see how much time you would save by hopping over there. The hop takes two seconds, so reduce the savings by that much."""
+    """For each space on the track, look in all four directions. If you are looking at a wall with a track immediately on the other side, see how much time you would save by hopping over there. The hop takes two seconds, so reduce the savings by that much."""
     start, _, tracks, walls = read_input(lines)
     times = assign_times(start, tracks)
     result = 0
