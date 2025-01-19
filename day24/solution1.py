@@ -8,25 +8,25 @@ initial_value_pattern = re.compile(r"""
                                    ([01])             # value
                                    """, re.X)
 
-operation_pattern = re.compile(r"""
-                               (\w{3})     # source 1
+gate_pattern = re.compile(r"""
+                               (\w{3})     # input 1
                                \s
                                (\w{2,3})   # AND, OR, XOR
                                \s
-                               (\w{3})     # source 2
+                               (\w{3})     # input 2
                                \s->\s
-                               (\w{3})     # register           
+                               (\w{3})     # output
                                """, re.X)
 
-Operation = namedtuple('Operation', ['source1', 'action', 'source2', 'target'])
+Gate = namedtuple('Gate', ['input1', 'action', 'input2', 'output'])
 
 
 def run(lines):
     registers = {register: None for register in get_all_registers(lines)}
     for register, value in get_initial_values(lines):
         registers[register] = value
-    operations = get_operations(lines)
-    perform_operations(registers, operations)
+    gates = get_gates(lines)
+    perform_operations(registers, gates)
     return convert_to_number(registers)
 
 
@@ -36,7 +36,7 @@ def get_all_registers(lines) -> set[str]:
     for line in lines:
         if match := initial_value_pattern.fullmatch(line):
             result.add(match.group(1))
-        elif match := operation_pattern.fullmatch(line):
+        elif match := gate_pattern.fullmatch(line):
             result.add(match.group(1))
             result.add(match.group(3))
             result.add(match.group(4))
@@ -55,41 +55,41 @@ def get_initial_values(lines) -> list[tuple[str, bool]]:
     return result
 
 
-def get_operations(lines) -> list[Operation]:
-    """Read the operations from the input."""
+def get_gates(lines) -> list[Gate]:
+    """Read the gates from the input."""
     result = []
     for line in lines:
-        match = operation_pattern.fullmatch(line)
+        match = gate_pattern.fullmatch(line)
         if match:
-            operation = Operation(match.group(1), match.group(2), match.group(3), match.group(4))
+            operation = Gate(match.group(1), match.group(2), match.group(3), match.group(4))
             result.append(operation)
     return result
 
 
-def perform_operations(registers: dict[str, bool], operations: list[Operation]):
+def perform_operations(registers: dict[str, bool], gates: list[Gate]):
     """For each operation, try to execute it. If either of its inputs is unavailable, put it 
     back on the queue and try again later. 
     Run until all operations are complete. I tried exiting early when all z-registers were set, 
     but it was the same speed.
     """
-    q = deque(operations)
+    q = deque(gates)
     while q:
-        operation = q.popleft()
-        source1, source2 = registers[operation.source1], registers[operation.source2]
-        if source1 is None or source2 is None:
-            q.append(operation)
+        gate = q.popleft()
+        input1, input2 = registers[gate.input1], registers[gate.input2]
+        if input1 is None or input2 is None:
+            q.append(gate)
         else:
-            registers[operation.target] = perform_operation(source1, operation.action, source2)
+            registers[gate.output] = perform_operation(input1, gate.action, input2)
 
 
-def perform_operation(b1: bool, operation: str, b2: bool):
+def perform_operation(input1: bool, operation: str, input2: bool):
     """Perform whatever boolean operation is requested"""
     if operation == 'AND':
-        return b1 and b2
+        return input1 and input2
     elif operation == 'OR':
-        return b1 or b2
+        return input1 or input2
     else:
-        return b1 != b2
+        return input1 != input2
 
 
 def convert_to_number(registers: dict[str, bool]):
